@@ -129,9 +129,21 @@ FROM libros
 INNER JOIN prestamos
 ON libros.isbn = prestamos.libros_isbn
 GROUP BY libros.titulo
-HAVING COUNT(prestamos.libros_isbn) > 1
+HAVING COUNT(prestamos.libros_isbn) > 1 --HAVING COUNT(*) > 1
 ORDER BY cuenta DESC
 LIMIT 1; 
 
 -- d. Si se cobrara una multa de $100 por cada día de atraso, mostrar cuánto
 -- debería pagar cada usuario que entregue el préstamo después de 7 días.
+
+SELECT socios.nombre || ' ' || socios.apellido AS socio,
+libros.titulo,
+((prestamos.fecha_esperada_dev - prestamos.fecha_inicio) - 7) AS dias_atraso,
+((prestamos.fecha_esperada_dev - prestamos.fecha_inicio) - 7) * 100 AS multa 
+FROM prestamos
+INNER JOIN socios
+ON socios.rut = prestamos.socio_rut
+INNER JOIN libros
+ON libros.isbn = prestamos.libros_isbn
+WHERE (prestamos.fecha_esperada_dev - prestamos.fecha_inicio) > 7
+ORDER BY multa ASC;
