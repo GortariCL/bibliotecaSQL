@@ -1,11 +1,5 @@
 -- Parte 2 - Creando el modelo en la base de datos
 
-DROP TABLE IF EXISTS libros_autor;
-DROP TABLE IF EXISTS autor;
-DROP TABLE IF EXISTS prestamos;
-DROP TABLE IF EXISTS libros;
-DROP TABLE IF EXISTS socios;
-
 -- 1. Crear el modelo en una base de datos llamada biblioteca, considerando las tablas
 -- definidas y sus atributos.
 
@@ -13,6 +7,12 @@ CREATE DATABASE biblioteca;
 \c biblioteca
 
 SET DATESTYLE TO 'European'; -- Formateo de fecha a estilo Europeo (dd-mm-aaaa)
+
+DROP TABLE IF EXISTS libros_autor;
+DROP TABLE IF EXISTS autor;
+DROP TABLE IF EXISTS prestamos;
+DROP TABLE IF EXISTS libros;
+DROP TABLE IF EXISTS socios;
 
 CREATE TABLE socios(
     rut VARCHAR(15) PRIMARY KEY,
@@ -124,7 +124,8 @@ ORDER BY fecha_nac ASC;
 
 -- c. ¿Cuál es el libro más solicitado?.
 
-SELECT libros.titulo, COUNT(prestamos.libros_isbn) AS cuenta FROM libros 
+SELECT libros.titulo, COUNT(prestamos.libros_isbn) AS cuenta 
+FROM libros 
 INNER JOIN prestamos
 ON libros.isbn = prestamos.libros_isbn
 GROUP BY libros.titulo
